@@ -3,6 +3,8 @@
   "version": 2,
   "projects": {
     "pwa": "apps/pwa",
+    "pwa-angular": "apps/pwa-angular",
+    "pwa-angular-e2e": "apps/pwa-angular-e2e",
     "pwa-e2e": "apps/pwa-e2e"
   }
 }
