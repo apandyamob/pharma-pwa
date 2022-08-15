@@ -33,7 +33,7 @@ const disableUserSelect = () => {
   if (!isPWA()) {
     return;
   }
-  document.querySelectorAll('html,body,#root').forEach((e) => {
+  document.querySelectorAll('html,body,#root').forEach((e: any) => {
     e.style['user-select'] = 'none';
   });
 };

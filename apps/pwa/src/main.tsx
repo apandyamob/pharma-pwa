@@ -1,4 +1,4 @@
-import './registerServiceWorker.js';
+import './registerServiceWorker';
 
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
