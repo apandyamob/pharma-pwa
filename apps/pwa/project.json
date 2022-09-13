@@ -59,7 +59,8 @@
           "apps/pwa/src/assets",
           "apps/pwa/src/manifest.json",
           "apps/pwa/src/robots.txt",
-          "apps/pwa/src/firebase-messaging-sw.js"
+          "apps/pwa/src/firebase-messaging-sw.js",
+          "apps/pwa/src/react-pwa"
         ],
         "styles": ["apps/pwa/src/styles.css"],
         "scripts": [],
