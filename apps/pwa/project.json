@@ -58,7 +58,8 @@
           "apps/pwa/src/favicon.ico",
           "apps/pwa/src/assets",
           "apps/pwa/src/manifest.json",
-          "apps/pwa/src/robots.txt"
+          "apps/pwa/src/robots.txt",
+          "apps/pwa/src/firebase-messaging-sw.js"
         ],
         "styles": ["apps/pwa/src/styles.css"],
         "scripts": [],
