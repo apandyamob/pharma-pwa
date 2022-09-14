@@ -12,8 +12,8 @@ import { useState } from 'react';
 export default function App() {
   const [show, setShow] = useState(false);
   const [notification, setNotification] = useState({ title: '', body: '' });
-  const [token, setToken] = useState(null);
-  askForPermissionToReceiveNotifications(setToken);
+  const [token] = useState(null);
+  askForPermissionToReceiveNotifications();
 
   onMessageListener()
     .then((payload: any) => {

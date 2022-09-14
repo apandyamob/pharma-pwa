@@ -14,7 +14,7 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const messaging = getMessaging(firebaseApp);
 
-export const askForPermissionToReceiveNotifications = (setToken: any) => {
+export const askForPermissionToReceiveNotifications = (setToken?: any) => {
   try {
     return getToken(messaging, {
       vapidKey:
@@ -22,7 +22,8 @@ export const askForPermissionToReceiveNotifications = (setToken: any) => {
     })
       .then((currentToken) => {
         if (currentToken) {
-          setToken(currentToken);
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          setToken ? setToken(currentToken) : '';
           console.log('current token for client: ', currentToken);
           // Track the token -> client mapping, by sending to backend server
           // show on the UI that permission is secured
