@@ -11,11 +11,11 @@ export function App() {
   const [token, setToken] = useState('');
   askForPermissionToReceiveNotifications(setToken);
 
-  onMessageListener()
-    .then((payload: any) => {
-      alert(payload);
-    })
-    .catch((err) => console.log('failed: ', err));
+  // onMessageListener()
+  //   .then((payload: any) => {
+  //     alert(payload);
+  //   })
+  //   .catch((err) => console.log('failed: ', err));
 
   return (
     <>
