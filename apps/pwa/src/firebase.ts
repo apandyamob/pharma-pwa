@@ -34,7 +34,6 @@ export const askForPermissionToReceiveNotifications = (setToken: any) => {
         }
       })
       .catch((err) => {
-        setToken(err);
         console.log('An error occurred while retrieving token. ', err);
         // catch error while creating client token
       });

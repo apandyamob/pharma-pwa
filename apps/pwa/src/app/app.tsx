@@ -12,8 +12,8 @@ import { useState } from 'react';
 export default function App() {
   const [show, setShow] = useState(false);
   const [notification, setNotification] = useState({ title: '', body: '' });
-  const [isTokenFound, setTokenFound] = useState(false);
-  askForPermissionToReceiveNotifications(setTokenFound);
+  const [token, setToken] = useState(null);
+  askForPermissionToReceiveNotifications(setToken);
 
   onMessageListener()
     .then((payload: any) => {
@@ -57,10 +57,21 @@ export default function App() {
         <Toast.Body>{notification.body}</Toast.Body>
       </Toast>
       <header className="App-header">
-        {isTokenFound && <h1> Notification permission enabled 👍🏻 </h1>}
-        {!isTokenFound && <h1> Need notification permission ❗️ </h1>}
+        {token && <h1> Notification permission enabled 👍🏻 </h1>}
+        {!token && <h1> Need notification permission ❗️ </h1>}
         <img src={logo} className="App-logo" alt="logo" />
-        <Button onClick={() => onShowNotificationClicked()}>Show Toast</Button>
+        <br />
+        <br />
+        <br />
+        <br /> <b>your token is below </b>
+        <br />
+        {token}
+        <br />
+        <br />
+        <br />
+        <Button onClick={() => onShowNotificationClicked()}>
+          Example Toast
+        </Button>
       </header>
     </div>
   );
