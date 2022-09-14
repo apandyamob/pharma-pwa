@@ -32,5 +32,23 @@ messaging.onBackgroundMessage(function (payload) {
     tag: 'notification-1',
   };
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  self.registration.showNotification(
+    notificationTitle + 'hello1',
+    notificationOptions
+  );
+});
+
+self.addEventListener('push', function (event) {
+  var pushData = event.data.json();
+  try {
+    var notificationData = pushData.data;
+    notificationData.data = JSON.parse(notificationData.data);
+    console.log(notificationData);
+    self.registration.showNotification(
+      pushData.notification.title + 'hello2',
+      notificationData
+    );
+  } catch (err) {
+    console.log('Push error happened: ', err);
+  }
 });
