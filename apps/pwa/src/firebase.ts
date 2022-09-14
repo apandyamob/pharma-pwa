@@ -14,15 +14,15 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const messaging = getMessaging(firebaseApp);
 
-export const askForPermissionToReceiveNotifications = () => {
+export const askForPermissionToReceiveNotifications = (setToken: any) => {
   return getToken(messaging, {
     vapidKey:
       'BFffdqLbxNEDVTEQC_pHfvep4wnJ6fbwaFJnojs3cjxqCTV-Y7L8Zp5M-wHFPrhmUWap4pEheciah-xluB6Iobk',
   })
     .then((currentToken) => {
       if (currentToken) {
+        setToken(currentToken);
         console.log('current token for client: ', currentToken);
-        alert(currentToken);
         // Track the token -> client mapping, by sending to backend server
         // show on the UI that permission is secured
       } else {
@@ -33,6 +33,7 @@ export const askForPermissionToReceiveNotifications = () => {
       }
     })
     .catch((err) => {
+      setToken(err);
       console.log('An error occurred while retrieving token. ', err);
       // catch error while creating client token
     });

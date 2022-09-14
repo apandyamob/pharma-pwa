@@ -1,13 +1,15 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {
   askForPermissionToReceiveNotifications,
   onMessageListener,
 } from '../firebase';
 
 import NxWelcome from './nx-welcome';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { useState } from 'react';
 
 export function App() {
-  askForPermissionToReceiveNotifications();
+  const [token, setToken] = useState('');
+  askForPermissionToReceiveNotifications(setToken);
 
   onMessageListener()
     .then((payload: any) => {
@@ -17,6 +19,7 @@ export function App() {
 
   return (
     <>
+      TOKEN: {token}
       <NxWelcome title="pwa" />
       <div />
     </>
