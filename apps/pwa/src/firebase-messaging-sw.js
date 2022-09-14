@@ -24,18 +24,7 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function (payload) {
-  console.log('Received background message ', payload);
-
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    tag: 'notification-1',
-  };
-
-  self.registration.showNotification(
-    notificationTitle + 'hello1',
-    notificationOptions
-  );
+  return null;
 });
 
 self.addEventListener('push', function (event) {
@@ -45,7 +34,7 @@ self.addEventListener('push', function (event) {
     notificationData.data = JSON.parse(notificationData.data);
     console.log(notificationData);
     self.registration.showNotification(
-      pushData.notification.title + 'hello2',
+      pushData.notification.title,
       notificationData
     );
   } catch (err) {
