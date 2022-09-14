@@ -22,7 +22,7 @@ firebase.initializeApp(firebaseConfig);
 
 // Retrieve firebase messaging
 const messaging = firebase.messaging();
-console.log('Aakash');
+
 messaging.onBackgroundMessage(function (payload) {
   console.log('Received background message ', payload);
 
@@ -31,6 +31,6 @@ messaging.onBackgroundMessage(function (payload) {
     body: payload.notification.body,
     tag: 'notification-1',
   };
-  console.log('I am from service worker');
+
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
