@@ -22,12 +22,10 @@ export default function App() {
         body: payload.notification.body,
       });
 
+      setShow(true);
       new Notification(payload.notification.title, {
         body: payload.notification.body,
       });
-
-      setShow(true);
-      console.log(payload);
     })
     .catch((err: any) => console.log('failed: ', err));
 
