@@ -23,9 +23,13 @@ export default function App() {
       });
 
       setShow(true);
-      new Notification(payload.notification.title, {
-        body: payload.notification.body,
-      });
+      try {
+        new Notification(payload.notification.title, {
+          body: payload.notification.body,
+        });
+      } catch (ex) {
+        console.log(ex);
+      }
     })
     .catch((err: any) => console.log('failed: ', err));
 
@@ -34,8 +38,13 @@ export default function App() {
       title: 'Notification',
       body: 'This is a test notification',
     });
-    new Notification('Notification', { body: 'This is a test notification' });
     setShow(true);
+
+    try {
+      new Notification('Notification', { body: 'This is a test notification' });
+    } catch (ex) {
+      console.log(ex);
+    }
   };
 
   return (
