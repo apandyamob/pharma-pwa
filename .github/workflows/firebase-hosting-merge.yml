@@ -11,17 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
-
-      - name: deployment
-        uses: w9jds/firebase-action@master
+      - run: npm ci && npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MAXOR_PWA }}'
           channelId: live
           projectId: maxor-pwa
-        env:
-          FIREBASE_CLI_EXPERIMENTS: webframeworks
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MAXOR_PWA }}
