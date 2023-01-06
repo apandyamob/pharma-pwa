@@ -13,5 +13,5 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_PHARMACY_PWA }}'
-          projectId: pharmacy-pwa
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MAXOR_PWA }}'
+          projectId: maxor-pwa

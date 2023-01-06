@@ -11,9 +11,9 @@ importScripts(
 // Initialize the Firebase app in the service worker by passing the generated config
 var firebaseConfig = {
   apiKey: 'AIzaSyAyLAppI7ls5auZbjV4jFLNSw-9IPJv5Hw',
-  authDomain: 'pharmacy-pwa.firebaseapp.com',
-  projectId: 'pharmacy-pwa',
-  storageBucket: 'pharmacy-pwa.appspot.com',
+  authDomain: 'maxor-pwa.firebaseapp.com',
+  projectId: 'maxor-pwa',
+  storageBucket: 'maxor-pwa.appspot.com',
   messagingSenderId: '490787804854',
   appId: '1:490787804854:web:dee991a03e221487a4f817',
 };
