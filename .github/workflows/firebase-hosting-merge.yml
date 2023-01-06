@@ -16,7 +16,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - run: yarn build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+        uses: w9jds/firebase-action@master
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MAXOR_PWA }}'
@@ -24,3 +24,4 @@ jobs:
           projectId: maxor-pwa
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MAXOR_PWA }}
