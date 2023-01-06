@@ -3,13 +3,16 @@ import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { initializeApp } from 'firebase/app';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAyLAppI7ls5auZbjV4jFLNSw-9IPJv5Hw',
+  apiKey: 'AIzaSyB22_z4Karwovf3gCjPdFYgTZ_Ib2c3i6Y',
   authDomain: 'maxor-pwa.firebaseapp.com',
   projectId: 'maxor-pwa',
   storageBucket: 'maxor-pwa.appspot.com',
-  messagingSenderId: '490787804854',
-  appId: '1:490787804854:web:dee991a03e221487a4f817',
+  messagingSenderId: '1082575576782',
+  appId: '1:1082575576782:web:0f9dc48316a9896665ba9f',
 };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
 const firebaseApp = initializeApp(firebaseConfig);
 const messaging = getMessaging(firebaseApp);
