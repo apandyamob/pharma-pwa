@@ -50,7 +50,7 @@
         "compiler": "babel",
         "outputPath": "dist/apps/pwa",
         "index": "apps/pwa/src/index.html",
-        "baseHref": "/react-app/",
+        "baseHref": "/react-pwa/",
         "main": "apps/pwa/src/main.tsx",
         "polyfills": "apps/pwa/src/polyfills.ts",
         "tsConfig": "apps/pwa/tsconfig.app.json",
