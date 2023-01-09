@@ -1,5 +1,4 @@
 import './registerServiceWorker';
-import './firebase'
 
 import * as ReactDOM from 'react-dom/client';
 
@@ -11,6 +10,6 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <StrictMode>
-    <App />
+    <>Hey1</>
   </StrictMode>
 );
