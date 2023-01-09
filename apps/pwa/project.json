@@ -55,7 +55,6 @@
         "polyfills": "apps/pwa/src/polyfills.ts",
         "tsConfig": "apps/pwa/tsconfig.app.json",
         "assets": [
-          "apps/pwa/src/favicon.ico",
           "apps/pwa/src/assets",
           "apps/pwa/src/manifest.json",
           "apps/pwa/src/robots.txt",

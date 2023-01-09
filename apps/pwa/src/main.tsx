@@ -10,6 +10,6 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <StrictMode>
-    <>Maxor retail pharmacy</>
+    <>JPS Retail pharmacy</>
   </StrictMode>
 );
