@@ -10,6 +10,6 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <StrictMode>
-    <>JPS Retail Pharmacy</>
+    <>JPS Retail Pharmacy 312</>
   </StrictMode>
 );
