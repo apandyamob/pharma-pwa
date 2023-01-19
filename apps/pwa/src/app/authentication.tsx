@@ -97,8 +97,10 @@ export default function Authentication() {
     try {
       const cred = await navigator.credentials.create(options as any);
       console.log(cred);
+      alert('SUCCESS');
     } catch (ex) {
       console.log(ex);
+      alert('FAILURE');
     }
   };
 
