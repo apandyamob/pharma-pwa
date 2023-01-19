@@ -2,7 +2,7 @@ import './registerServiceWorker';
 
 import * as ReactDOM from 'react-dom/client';
 
-import App from './app/app';
+import Authentication from './app/authentication';
 import { StrictMode } from 'react';
 
 const root = ReactDOM.createRoot(
@@ -10,6 +10,6 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <StrictMode>
-    <>JPS Retail Pharmacy 312</>
+    <Authentication />
   </StrictMode>
 );
