@@ -1,3 +1,5 @@
+import base64url from 'base64url';
+
 function BrowseName() {
   const userAgentString = navigator.userAgent;
 
@@ -95,9 +97,21 @@ function DeviceDetails() {
 export default function Authentication() {
   const registerCredential = async () => {
     try {
-      const cred = await navigator.credentials.create(options as any);
-      console.log(cred);
-      alert('SUCCESS');
+      const cred: any = await navigator.credentials.create(options as any);
+      console.log('registration', cred);
+      localStorage.setItem(`credId`, cred.id);
+
+      base64url.encode(cred.rawId);
+    } catch (ex) {
+      console.log(ex);
+      alert('FAILURE');
+    }
+  };
+
+  const validateCredential = async () => {
+    try {
+      const cred = await navigator.credentials.get(options as any);
+      console.log('validation', cred);
     } catch (ex) {
       console.log(ex);
       alert('FAILURE');
@@ -109,6 +123,13 @@ export default function Authentication() {
       <DeviceDetails />
       <button id="register" onClick={registerCredential}>
         Register Credential
+      </button>
+
+      <br />
+      <br />
+
+      <button id="register" onClick={validateCredential}>
+        Validate Credential
       </button>
     </>
   );

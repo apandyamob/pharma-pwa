@@ -9,6 +9,7 @@
   },
   "private": true,
   "dependencies": {
+    "base64url": "^3.0.1",
     "bootstrap": "^5.2.1",
     "core-js": "^3.6.5",
     "firebase": "^9.9.4",
