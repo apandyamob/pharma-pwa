@@ -54,7 +54,11 @@ const registerServiceWorker = () => {
                       'Update available! To update, close all windows and reopen.'
                     ) === true
                   ) {
-                    window.location.reload();
+                    window.close();
+                  } else {
+                    installingServiceWorker.postMessage({
+                      type: 'SKIP_WAITING',
+                    });
                   }
                 }
               }
@@ -81,10 +85,9 @@ const registerServiceWorker = () => {
               if (waitingServiceWorker.state === 'installed') {
                 console.log('came to waiting worker installed state');
                 window.skipWaiting();
+                window.location.reload();
               }
             });
-
-            waitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
           }
         };
       },
