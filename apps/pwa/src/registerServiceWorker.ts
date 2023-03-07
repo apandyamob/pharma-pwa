@@ -62,7 +62,7 @@ const registerServiceWorker = () => {
                     'Update available! To update, close all windows and reopen.'
                   ) === true
                 ) {
-                  window.close();
+                  window.location.reload();
                 } else {
                   registration?.waiting?.postMessage({ type: 'SKIP_WAITING' });
                 }
