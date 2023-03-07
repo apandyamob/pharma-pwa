@@ -33,42 +33,48 @@ const registerServiceWorker = () => {
         }, 1000 * 60 * 1); // 1 min
 
         registration.onupdatefound = () => {
-          const installingWorker = registration.installing;
-          console.log('service worker update found', installingWorker);
+          const installingServiceWorker = registration.installing;
+          console.log('service worker update found', installingServiceWorker);
 
-          if (installingWorker == null) {
-            console.log('came to installingWorker null');
-            return;
-          }
-
-          installingWorker.onstatechange = () => {
-            console.log(
-              'service worker install state changed',
-              installingWorker.state
-            );
-            if (installingWorker.state === 'installed') {
-              if (navigator.serviceWorker.controller) {
-                // At this point, the updated pre-cached content has been fetched,
-                // but the previous service worker will still serve the older
-                // content until all client tabs are closed.
-                console.log(
-                  'New content is available and will be used when all ' +
-                    'tabs for this page are closed. See https://bit.ly/CRA-PWA.'
-                );
-
-                // eslint-disable-next-line no-alert
-                if (
-                  confirm(
-                    'Update available! To update, close all windows and reopen.'
-                  ) === true
-                ) {
-                  window.location.reload();
-                } else {
-                  registration?.waiting?.postMessage({ type: 'SKIP_WAITING' });
+          if (installingServiceWorker) {
+            installingServiceWorker.onstatechange = () => {
+              console.log(
+                'service worker install state changed',
+                installingServiceWorker.state
+              );
+              if (installingServiceWorker.state === 'installed') {
+                if (navigator.serviceWorker.controller) {
+                  // eslint-disable-next-line no-alert
+                  if (
+                    confirm(
+                      'Update available! To update, close all windows and reopen.'
+                    ) === true
+                  ) {
+                    window.location.reload();
+                  }
                 }
               }
-            }
-          };
+            };
+          }
+
+          const waitingServiceWorker = registration.waiting;
+          console.log(
+            'came to waitingServiceWorker part',
+            waitingServiceWorker
+          );
+
+          if (waitingServiceWorker) {
+            waitingServiceWorker.onstatechange = () => {
+              console.log(
+                'service worker install state changed',
+                waitingServiceWorker.state
+              );
+              if (waitingServiceWorker.state === 'activated') {
+                window.location.reload();
+              }
+            };
+            waitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
+          }
         };
       },
       (error) => {
