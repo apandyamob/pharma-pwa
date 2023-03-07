@@ -24,7 +24,7 @@ const registerServiceWorker = () => {
   }
 
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js').then(
+    navigator.serviceWorker.register('./service-worker.js').then(
       function (registration) {
         console.log('Service worker registration succeeded:', registration);
 
