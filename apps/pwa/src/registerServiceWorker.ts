@@ -29,7 +29,11 @@ const registerServiceWorker = () => {
 
         setInterval(() => {
           registration.update();
-          console.debug('checked for update...');
+          console.debug(
+            'checked for update...',
+            registration.installing,
+            registration.waiting
+          );
         }, 1000 * 60 * 1); // 1 min
 
         registration.onupdatefound = () => {
@@ -68,16 +72,18 @@ const registerServiceWorker = () => {
           );
 
           if (waitingServiceWorker) {
-            waitingServiceWorker.onstatechange = () => {
+            waitingServiceWorker.addEventListener('statechange', () => {
               console.log(
                 'service worker install state changed',
                 waitingServiceWorker.state
               );
+
               if (waitingServiceWorker.state === 'activated') {
                 console.log('came to waiting worker activated state');
                 window.location.reload();
               }
-            };
+            });
+
             waitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
           }
         };
