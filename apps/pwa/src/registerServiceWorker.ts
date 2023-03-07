@@ -41,7 +41,7 @@ const registerServiceWorker = () => {
           console.log('service worker update found', installingServiceWorker);
 
           if (installingServiceWorker) {
-            installingServiceWorker.onstatechange = () => {
+            installingServiceWorker.addEventListener('statechange', () => {
               console.log(
                 'service worker install state changed',
                 installingServiceWorker.state
@@ -62,7 +62,7 @@ const registerServiceWorker = () => {
                 console.log('came to installing worker activated state');
                 window.location.reload();
               }
-            };
+            });
           }
 
           const waitingServiceWorker = registration.waiting;
@@ -97,6 +97,7 @@ const registerServiceWorker = () => {
 
 // This allows the web app to trigger skipWaiting via
 self.addEventListener('message', (event) => {
+  console.log('service worker message listener');
   if (event.data && event.data.type === 'SKIP_WAITING') {
     console.log('service worker skip waiting');
     self.skipWaiting();
