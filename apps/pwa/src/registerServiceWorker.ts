@@ -54,6 +54,10 @@ const registerServiceWorker = () => {
                   }
                 }
               }
+              if (installingServiceWorker.state === 'activated') {
+                console.log('came to installing worker activated state');
+                window.location.reload();
+              }
             };
           }
 
@@ -70,6 +74,7 @@ const registerServiceWorker = () => {
                 waitingServiceWorker.state
               );
               if (waitingServiceWorker.state === 'activated') {
+                console.log('came to waiting worker activated state');
                 window.location.reload();
               }
             };
