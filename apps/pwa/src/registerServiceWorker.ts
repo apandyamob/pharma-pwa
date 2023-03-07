@@ -15,7 +15,6 @@ const registerServiceWorker = () => {
       )
   );
 
-  // const isServiceWorkerSupported = 'serviceWorker' in navigator && !isLocalhost;
   const isServiceWorkerSupported = 'serviceWorker' in navigator && !isLocalhost;
 
   if (!isServiceWorkerSupported) {
@@ -28,12 +27,10 @@ const registerServiceWorker = () => {
       function (registration) {
         console.log('Service worker registration succeeded:', registration);
 
-        registration.update();
-
         setInterval(() => {
           registration.update();
           console.debug('checked for update...');
-        }, 1000 * 60 * 0.5); // 30 secs
+        }, 1000 * 60 * 1); // 1 min
 
         registration.onupdatefound = () => {
           const installingWorker = registration.installing;
@@ -45,7 +42,10 @@ const registerServiceWorker = () => {
           }
 
           installingWorker.onstatechange = () => {
-            console.log('service worker install state changed');
+            console.log(
+              'service worker install state changed',
+              installingWorker.state
+            );
             if (installingWorker.state === 'installed') {
               if (navigator.serviceWorker.controller) {
                 // At this point, the updated pre-cached content has been fetched,
