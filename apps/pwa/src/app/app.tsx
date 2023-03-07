@@ -82,7 +82,7 @@ export default function App() {
         <br />
         <br />
         <Button onClick={() => onShowNotificationClicked()}>
-          Example Toast 1.2
+          Example Toast 1.3
         </Button>
       </header>
     </div>

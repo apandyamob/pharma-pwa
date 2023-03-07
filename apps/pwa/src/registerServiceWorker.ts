@@ -33,15 +33,14 @@ const registerServiceWorker = () => {
         setInterval(() => {
           registration.update();
           console.debug('checked for update...');
-        }, 1000 * 60 * 5);
+        }, 1000 * 60 * 0.5); // 30 secs
 
         registration.onupdatefound = () => {
-          console.log('service worker update found');
-
           const installingWorker = registration.installing;
+          console.log('service worker update found', installingWorker);
+
           if (installingWorker == null) {
             console.log('came to installingWorker null');
-
             return;
           }
 
