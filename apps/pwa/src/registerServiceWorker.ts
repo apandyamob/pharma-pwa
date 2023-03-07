@@ -78,6 +78,10 @@ const registerServiceWorker = () => {
                 console.log('came to waiting worker activated state');
                 window.location.reload();
               }
+              if (waitingServiceWorker.state === 'installed') {
+                console.log('came to waiting worker installed state');
+                window.skipWaiting();
+              }
             });
 
             waitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
@@ -91,13 +95,13 @@ const registerServiceWorker = () => {
   });
 
   // This allows the web app to trigger skipWaiting via
-  window.addEventListener('message', (event) => {
-    console.log('service worker message listener', event.data);
-    if (event.data && event.data.type === 'SKIP_WAITING') {
-      console.log('service worker skip waiting');
-      window.skipWaiting();
-    }
-  });
+  // window.addEventListener('message', (event) => {
+  //   console.log('service worker message listener', event.data);
+  //   if (event.data && event.data.type === 'SKIP_WAITING') {
+  //     console.log('service worker skip waiting');
+  //     window.skipWaiting();
+  //   }
+  // });
 };
 
 const disableUserSelect = () => {
