@@ -1,3 +1,11 @@
+/// <reference lib="webworker" />
+/* eslint-disable no-restricted-globals */
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface Window {
+  skipWaiting: () => void;
+}
+
 const registerServiceWorker = () => {
   const isLocalhost = Boolean(
     window.location.hostname === 'localhost' ||
@@ -7,6 +15,7 @@ const registerServiceWorker = () => {
       )
   );
 
+  // const isServiceWorkerSupported = 'serviceWorker' in navigator && !isLocalhost;
   const isServiceWorkerSupported = 'serviceWorker' in navigator && !isLocalhost;
 
   if (!isServiceWorkerSupported) {
@@ -18,6 +27,50 @@ const registerServiceWorker = () => {
     navigator.serviceWorker.register('/service-worker.js').then(
       function (registration) {
         console.log('Service worker registration succeeded:', registration);
+
+        registration.update();
+
+        setInterval(() => {
+          registration.update();
+          console.debug('checked for update...');
+        }, 1000 * 60 * 5);
+
+        registration.onupdatefound = () => {
+          console.log('service worker update found');
+
+          const installingWorker = registration.installing;
+          if (installingWorker == null) {
+            console.log('came to installingWorker null');
+
+            return;
+          }
+
+          installingWorker.onstatechange = () => {
+            console.log('service worker install state changed');
+            if (installingWorker.state === 'installed') {
+              if (navigator.serviceWorker.controller) {
+                // At this point, the updated pre-cached content has been fetched,
+                // but the previous service worker will still serve the older
+                // content until all client tabs are closed.
+                console.log(
+                  'New content is available and will be used when all ' +
+                    'tabs for this page are closed. See https://bit.ly/CRA-PWA.'
+                );
+
+                // eslint-disable-next-line no-alert
+                if (
+                  confirm(
+                    'Update available! To update, close all windows and reopen.'
+                  ) === true
+                ) {
+                  window.close();
+                } else {
+                  registration?.waiting?.postMessage({ type: 'SKIP_WAITING' });
+                }
+              }
+            }
+          };
+        };
       },
       (error) => {
         console.log('Service worker registration failed:', error);
@@ -25,6 +78,14 @@ const registerServiceWorker = () => {
     );
   });
 };
+
+// This allows the web app to trigger skipWaiting via
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    console.log('service worker skip waiting');
+    self.skipWaiting();
+  }
+});
 
 const disableUserSelect = () => {
   const isPWA = () => {
