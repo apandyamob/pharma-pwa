@@ -57,16 +57,19 @@ const registerServiceWorker = () => {
                 'service worker installed but waiting for activate',
                 navigator.serviceWorker.controller
               );
-              // eslint-disable-next-line no-alert
-              if (
-                confirm('Update available! Do you want to update now?') === true
-              ) {
-                console.log('skip waiting and load new changes');
+              if (navigator.serviceWorker.controller) {
+                // eslint-disable-next-line no-alert
+                if (
+                  confirm('Update available! Do you want to update now?') ===
+                  true
+                ) {
+                  console.log('skip waiting and load new changes');
 
-                // This allows the web app to trigger skipWaiting via
-                installingServiceWorker.postMessage({
-                  type: 'SKIP_WAITING',
-                });
+                  // This allows the web app to trigger skipWaiting via
+                  installingServiceWorker.postMessage({
+                    type: 'SKIP_WAITING',
+                  });
+                }
               }
             }
 
