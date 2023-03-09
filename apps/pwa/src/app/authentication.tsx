@@ -1,4 +1,5 @@
 import base64url from 'base64url';
+import logo from '../assets/favicon-32x32.png';
 
 function BrowseName() {
   const userAgentString = navigator.userAgent;
@@ -90,6 +91,7 @@ function DeviceDetails() {
       {(navigator as any).standalone === true && (
         <b> PWA is getting used as an app</b>
       )}
+      <img src={logo} className="App-logo" alt="logo" />
     </>
   );
 }
