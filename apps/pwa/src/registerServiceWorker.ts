@@ -67,8 +67,6 @@ const registerServiceWorker = () => {
                 installingServiceWorker.postMessage({
                   type: 'SKIP_WAITING',
                 });
-              } else {
-                console.log('no action by user');
               }
             }
 
@@ -79,28 +77,28 @@ const registerServiceWorker = () => {
           };
         };
 
-        const waitingServiceWorker = registration.waiting;
+        // const waitingServiceWorker = registration.waiting;
         // console.log(
         //   'came to waitingServiceWorker part',
         //   waitingServiceWorker
         // );
 
-        if (waitingServiceWorker === null) {
-          console.log('waiting worker null');
-          return;
-        }
-        waitingServiceWorker.addEventListener('statechange', () => {
-          console.log(
-            'service worker install state changed',
-            waitingServiceWorker.state
-          );
+        // if (waitingServiceWorker === null) {
+        //   console.log('waiting worker null');
+        //   return;
+        // }
+        // waitingServiceWorker.addEventListener('statechange', () => {
+        //   console.log(
+        //     'service worker install state changed',
+        //     waitingServiceWorker.state
+        //   );
 
-          if (waitingServiceWorker.state === 'installed') {
-            console.log('came to waiting worker installed state');
-            window.skipWaiting();
-            window.location.reload();
-          }
-        });
+        //   if (waitingServiceWorker.state === 'installed') {
+        //     console.log('came to waiting worker installed state');
+        //     window.skipWaiting();
+        //     window.location.reload();
+        //   }
+        // });
       },
       (error) => {
         console.log('Service worker registration failed:', error);
