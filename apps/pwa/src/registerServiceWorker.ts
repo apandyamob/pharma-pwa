@@ -47,7 +47,9 @@ const registerServiceWorker = () => {
                 installingServiceWorker.state
               );
               if (installingServiceWorker.state === 'installed') {
+                console.log('service worker installed');
                 if (navigator.serviceWorker.controller) {
+                  console.log('service worker controller');
                   // eslint-disable-next-line no-alert
                   if (
                     confirm(
