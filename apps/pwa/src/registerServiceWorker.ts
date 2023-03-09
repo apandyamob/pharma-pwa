@@ -27,6 +27,8 @@ const registerServiceWorker = () => {
       function (registration) {
         console.log('Service worker registration succeeded:', registration);
 
+        registration.update();
+
         setInterval(() => {
           registration.update();
           console.debug(
