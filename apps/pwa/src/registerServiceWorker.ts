@@ -27,6 +27,11 @@ const registerServiceWorker = () => {
       function (registration) {
         console.log('Service worker registration succeeded:', registration);
 
+        if (!navigator.serviceWorker.controller) {
+          console.log('no controller found');
+          return;
+        }
+
         registration.update();
 
         setInterval(() => {
@@ -42,36 +47,41 @@ const registerServiceWorker = () => {
           const installingServiceWorker = registration.installing;
           console.log('service worker update found', installingServiceWorker);
 
-          if (installingServiceWorker) {
-            installingServiceWorker.onstatechange = () => {
+          if (installingServiceWorker === null) {
+            console.log('installing worker null');
+            return;
+          }
+
+          installingServiceWorker.onstatechange = () => {
+            console.log(
+              'service worker install state changed',
+              installingServiceWorker.state
+            );
+            if (installingServiceWorker.state === 'installed') {
               console.log(
-                'service worker install state changed',
-                installingServiceWorker.state
+                'service worker installed but waiting for activate',
+                navigator.serviceWorker.controller
               );
-              if (installingServiceWorker.state === 'installed') {
-                console.log('service worker installed');
-                if (navigator.serviceWorker.controller) {
-                  console.log('service worker controller');
-                  // eslint-disable-next-line no-alert
-                  if (
-                    confirm(
-                      'Update available! To update, close all windows and reopen.'
-                    ) === true
-                  ) {
-                    console.log('close window');
+              if (navigator.serviceWorker.controller) {
+                console.log('service worker controller');
+                // eslint-disable-next-line no-alert
+                if (
+                  confirm('Update available! Do you want to update now?') ===
+                  true
+                ) {
+                  console.log('skip waiting and load new changes');
+                  window.skipWaiting();
 
-                    window.close();
-                  } else {
-                    console.log('no action by user');
-
-                    // installingServiceWorker.postMessage({
-                    //   type: 'SKIP_WAITING',
-                    // });
-                  }
+                  // This allows the web app to trigger skipWaiting via
+                  // installingServiceWorker.postMessage({
+                  //   type: 'SKIP_WAITING',
+                  // });
+                } else {
+                  console.log('no action by user');
                 }
               }
-            };
-          }
+            }
+          };
 
           // const waitingServiceWorker = registration.waiting;
           // console.log(
@@ -105,7 +115,6 @@ const registerServiceWorker = () => {
     );
   });
 
-  // This allows the web app to trigger skipWaiting via
   // window.addEventListener('message', (event) => {
   //   console.log('service worker message listener', event.data);
   //   if (event.data && event.data.type === 'SKIP_WAITING') {
