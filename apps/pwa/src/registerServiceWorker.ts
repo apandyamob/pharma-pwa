@@ -71,6 +71,11 @@ const registerServiceWorker = () => {
                 console.log('no action by user');
               }
             }
+
+            if (installingServiceWorker.state === 'activated') {
+              console.log('came to installing worker activated state');
+              window.location.reload();
+            }
           };
         };
 
@@ -90,10 +95,6 @@ const registerServiceWorker = () => {
             waitingServiceWorker.state
           );
 
-          //     if (waitingServiceWorker.state === 'activated') {
-          //       console.log('came to waiting worker activated state');
-          //       window.location.reload();
-          //     }
           if (waitingServiceWorker.state === 'installed') {
             console.log('came to waiting worker installed state');
             window.skipWaiting();
@@ -107,13 +108,18 @@ const registerServiceWorker = () => {
     );
   });
 
-  // window.addEventListener('message', (event) => {
-  //   console.log('service worker message listener', event.data);
-  //   if (event.data && event.data.type === 'SKIP_WAITING') {
-  //     console.log('service worker skip waiting');
-  //     window.skipWaiting();
-  //   }
-  // });
+  window.addEventListener('message', (event) => {
+    console.log('service worker message listener', event.data);
+    if (event.data && event.data.type === 'SKIP_WAITING') {
+      console.log('service worker skip waiting');
+      window.skipWaiting();
+    }
+
+    if (event.data.action === 'skipWaiting') {
+      console.log('data action, service worker skip waiting');
+      self.skipWaiting();
+    }
+  });
 };
 
 const disableUserSelect = () => {
