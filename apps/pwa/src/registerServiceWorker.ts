@@ -108,18 +108,18 @@ const registerServiceWorker = () => {
     );
   });
 
-  window.addEventListener('message', (event) => {
-    console.log('service worker message listener', event.data);
-    if (event.data && event.data.type === 'SKIP_WAITING') {
-      console.log('service worker skip waiting');
-      window.skipWaiting();
-    }
+  // window.addEventListener('message', (event) => {
+  //   console.log('service worker message listener', event.data);
+  //   if (event.data && event.data.type === 'SKIP_WAITING') {
+  //     console.log('service worker skip waiting');
+  //     window.skipWaiting();
+  //   }
 
-    if (event.data.action === 'skipWaiting') {
-      console.log('data action, service worker skip waiting');
-      self.skipWaiting();
-    }
-  });
+  //   if (event.data.action === 'skipWaiting') {
+  //     console.log('data action, service worker skip waiting');
+  //     self.skipWaiting();
+  //   }
+  // });
 };
 
 const disableUserSelect = () => {
