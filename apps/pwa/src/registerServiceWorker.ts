@@ -41,7 +41,7 @@ const registerServiceWorker = () => {
           console.log('service worker update found', installingServiceWorker);
 
           if (installingServiceWorker) {
-            installingServiceWorker.addEventListener('statechange', () => {
+            installingServiceWorker.onstatechange = () => {
               console.log(
                 'service worker install state changed',
                 installingServiceWorker.state
@@ -54,41 +54,45 @@ const registerServiceWorker = () => {
                       'Update available! To update, close all windows and reopen.'
                     ) === true
                   ) {
+                    console.log('close window');
+
                     window.close();
                   } else {
-                    installingServiceWorker.postMessage({
-                      type: 'SKIP_WAITING',
-                    });
+                    console.log('no action by user');
+
+                    // installingServiceWorker.postMessage({
+                    //   type: 'SKIP_WAITING',
+                    // });
                   }
                 }
               }
-            });
+            };
           }
 
-          const waitingServiceWorker = registration.waiting;
-          console.log(
-            'came to waitingServiceWorker part',
-            waitingServiceWorker
-          );
+          // const waitingServiceWorker = registration.waiting;
+          // console.log(
+          //   'came to waitingServiceWorker part',
+          //   waitingServiceWorker
+          // );
 
-          if (waitingServiceWorker) {
-            waitingServiceWorker.addEventListener('statechange', () => {
-              console.log(
-                'service worker install state changed',
-                waitingServiceWorker.state
-              );
+          // if (waitingServiceWorker) {
+          //   waitingServiceWorker.addEventListener('statechange', () => {
+          //     console.log(
+          //       'service worker install state changed',
+          //       waitingServiceWorker.state
+          //     );
 
-              if (waitingServiceWorker.state === 'activated') {
-                console.log('came to waiting worker activated state');
-                window.location.reload();
-              }
-              if (waitingServiceWorker.state === 'installed') {
-                console.log('came to waiting worker installed state');
-                window.skipWaiting();
-                window.location.reload();
-              }
-            });
-          }
+          //     if (waitingServiceWorker.state === 'activated') {
+          //       console.log('came to waiting worker activated state');
+          //       window.location.reload();
+          //     }
+          //     if (waitingServiceWorker.state === 'installed') {
+          //       console.log('came to waiting worker installed state');
+          //       window.skipWaiting();
+          //       window.location.reload();
+          //     }
+          //   });
+          // }
         };
       },
       (error) => {
