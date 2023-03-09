@@ -27,11 +27,6 @@ const registerServiceWorker = () => {
       function (registration) {
         console.log('Service worker registration succeeded:', registration);
 
-        if (!navigator.serviceWorker.controller) {
-          console.log('no controller found');
-          return;
-        }
-
         registration.update();
 
         setInterval(() => {
@@ -62,52 +57,49 @@ const registerServiceWorker = () => {
                 'service worker installed but waiting for activate',
                 navigator.serviceWorker.controller
               );
-              if (navigator.serviceWorker.controller) {
-                console.log('service worker controller');
-                // eslint-disable-next-line no-alert
-                if (
-                  confirm('Update available! Do you want to update now?') ===
-                  true
-                ) {
-                  console.log('skip waiting and load new changes');
-                  window.skipWaiting();
+              // eslint-disable-next-line no-alert
+              if (
+                confirm('Update available! Do you want to update now?') === true
+              ) {
+                console.log('skip waiting and load new changes');
 
-                  // This allows the web app to trigger skipWaiting via
-                  // installingServiceWorker.postMessage({
-                  //   type: 'SKIP_WAITING',
-                  // });
-                } else {
-                  console.log('no action by user');
-                }
+                // This allows the web app to trigger skipWaiting via
+                installingServiceWorker.postMessage({
+                  type: 'SKIP_WAITING',
+                });
+              } else {
+                console.log('no action by user');
               }
             }
           };
+        };
 
-          // const waitingServiceWorker = registration.waiting;
-          // console.log(
-          //   'came to waitingServiceWorker part',
-          //   waitingServiceWorker
-          // );
+        const waitingServiceWorker = registration.waiting;
+        // console.log(
+        //   'came to waitingServiceWorker part',
+        //   waitingServiceWorker
+        // );
 
-          // if (waitingServiceWorker) {
-          //   waitingServiceWorker.addEventListener('statechange', () => {
-          //     console.log(
-          //       'service worker install state changed',
-          //       waitingServiceWorker.state
-          //     );
+        if (waitingServiceWorker === null) {
+          console.log('waiting worker null');
+          return;
+        }
+        waitingServiceWorker.addEventListener('statechange', () => {
+          console.log(
+            'service worker install state changed',
+            waitingServiceWorker.state
+          );
 
           //     if (waitingServiceWorker.state === 'activated') {
           //       console.log('came to waiting worker activated state');
           //       window.location.reload();
           //     }
-          //     if (waitingServiceWorker.state === 'installed') {
-          //       console.log('came to waiting worker installed state');
-          //       window.skipWaiting();
-          //       window.location.reload();
-          //     }
-          //   });
-          // }
-        };
+          if (waitingServiceWorker.state === 'installed') {
+            console.log('came to waiting worker installed state');
+            window.skipWaiting();
+            window.location.reload();
+          }
+        });
       },
       (error) => {
         console.log('Service worker registration failed:', error);
