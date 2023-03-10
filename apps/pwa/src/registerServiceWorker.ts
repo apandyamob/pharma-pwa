@@ -22,7 +22,7 @@ const registerServiceWorker = () => {
       function (registration) {
         console.log('Service worker registration succeeded:', registration);
 
-        registration.update();
+        // registration.update();
 
         setInterval(() => {
           registration.update();
@@ -31,7 +31,7 @@ const registerServiceWorker = () => {
             registration.installing,
             registration.waiting
           );
-        }, 1000 * 60 * 1); // 1 min
+        }, 1000 * 60 * 0.5); // 1 min
 
         registration.onupdatefound = () => {
           const installingServiceWorker = registration.installing;
