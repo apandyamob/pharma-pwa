@@ -79,6 +79,12 @@ const registerServiceWorker = () => {
             }
           };
         };
+
+        const waitingServiceWorker = registration.waiting;
+
+        if (waitingServiceWorker) {
+          alert('waiting worker found');
+        }
       },
       (error) => {
         console.log('Service worker registration failed:', error);
