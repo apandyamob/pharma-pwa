@@ -1,6 +1,10 @@
 /// <reference lib="webworker" />
 /* eslint-disable no-restricted-globals */
 
+const isPWA = () => {
+  return window.matchMedia('(display-mode: standalone)').matches;
+};
+
 const registerServiceWorker = () => {
   const isLocalhost = Boolean(
     window.location.hostname === 'localhost' ||
@@ -18,9 +22,33 @@ const registerServiceWorker = () => {
   }
 
   window.addEventListener('load', () => {
+    const originalSW = navigator.serviceWorker.controller;
+    // let refreshing: boolean;
+
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (originalSW) {
+        // This is due to an update.
+        // if (refreshing) return; // prevent infinite refresh loop when you use "Update on Reload"
+        // refreshing = true;
+        console.log('Controller loaded');
+        console.log('detected new SW');
+        window.location.reload();
+      } else {
+        // This is due to a SW taking control for the first time.
+        console.log('first SW');
+      }
+    });
+
     navigator.serviceWorker.register('./service-worker.js').then(
       function (registration) {
         console.log('Service worker registration succeeded:', registration);
+        // below condition will ensure that confirm modal not shown for the first installation
+        if (!navigator.serviceWorker.controller) {
+          console.log('controller for first time');
+          // The window client isn't currently controlled so it's a new service
+          // worker that will activate immediately
+          return;
+        }
 
         // registration.update();
 
@@ -55,28 +83,25 @@ const registerServiceWorker = () => {
                 'service worker installed but waiting for activate',
                 navigator.serviceWorker.controller
               );
-              // below condition will ensure that confirm modal not shown for the first installation
-              if (navigator.serviceWorker.controller) {
-                // eslint-disable-next-line no-alert
-                if (
-                  confirm('Update available! Do you want to update now?') ===
-                  true
-                ) {
-                  console.log('skip waiting and load new changes');
 
-                  // This allows the web app to trigger skipWaiting via
-                  installingServiceWorker.postMessage({
-                    type: 'SKIP_WAITING',
-                  });
-                }
+              // eslint-disable-next-line no-alert
+              if (
+                confirm('Update available! Do you want to update now?') === true
+              ) {
+                console.log('skip waiting and load new changes');
+
+                // This allows the web app to trigger skipWaiting via
+                installingServiceWorker.postMessage({
+                  type: 'SKIP_WAITING',
+                });
               }
             }
 
             // reload once worker is installed and activated
-            if (installingServiceWorker.state === 'activated') {
-              console.log('came to installing worker activated state');
-              window.location.reload();
-            }
+            // if (installingServiceWorker.state === 'activated') {
+            //   console.log('came to installing worker activated state');
+            //   window.location.reload();
+            // }
           };
         };
 
@@ -94,9 +119,6 @@ const registerServiceWorker = () => {
 };
 
 const disableUserSelect = () => {
-  const isPWA = () => {
-    return window.matchMedia('(display-mode: standalone)').matches;
-  };
   if (!isPWA()) {
     return;
   }
