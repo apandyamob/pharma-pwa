@@ -91,7 +91,7 @@ function DeviceDetails() {
       {(navigator as any).standalone === true && (
         <b> PWA is getting used as an app</b>
       )}
-      {/* <img src={logo} className="App-logo" alt="logo" /> */}
+      <img src={logo} className="App-logo" alt="logo" />
     </>
   );
 }
@@ -124,7 +124,7 @@ export default function Authentication() {
     <>
       <DeviceDetails />
       <button id="register" onClick={registerCredential}>
-        Register Credential 5.0
+        Register Credential 5.1
       </button>
 
       <br />
