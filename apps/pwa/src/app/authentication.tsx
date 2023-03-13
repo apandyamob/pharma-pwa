@@ -124,7 +124,7 @@ export default function Authentication() {
     <>
       <DeviceDetails />
       <button id="register" onClick={registerCredential}>
-        Register Credential 5.9
+        Register Credential 6.0
       </button>
 
       <br />
