@@ -129,6 +129,8 @@ export default function Authentication() {
       // Save the event because you’ll need to trigger it later.
       setDeferredPrompt(e);
     });
+
+    setTimeout(() => handleInstallButtonClick(), 100);
   }, []);
 
   const handleInstallButtonClick = () => {
