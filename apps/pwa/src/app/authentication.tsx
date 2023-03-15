@@ -130,10 +130,12 @@ export default function Authentication() {
       setDeferredPrompt(e);
     });
 
-    setTimeout(() => handleInstallButtonClick(), 100);
+    setTimeout(() => handleInstallButtonClick(), 1000);
   }, []);
 
   const handleInstallButtonClick = () => {
+    alert('installed');
+    console.log(deferredPrompt);
     deferredPrompt?.prompt();
   };
 
