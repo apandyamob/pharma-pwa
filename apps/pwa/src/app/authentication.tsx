@@ -1,5 +1,6 @@
 import base64url from 'base64url';
 import logo from '../assets/favicon-32x32.png';
+import { useEffect, useState } from 'react';
 
 function BrowseName() {
   const userAgentString = navigator.userAgent;
@@ -97,6 +98,7 @@ function DeviceDetails() {
 }
 
 export default function Authentication() {
+  const [deferredPrompt, setDeferredPrompt] = useState<any>();
   const registerCredential = async () => {
     try {
       const cred: any = await navigator.credentials.create(options as any);
@@ -120,6 +122,19 @@ export default function Authentication() {
     }
   };
 
+  useEffect(() => {
+    window.addEventListener('beforeinstallprompt', (e: any) => {
+      // Prevents the default mini-infobar or install dialog from appearing on mobile
+      e.preventDefault();
+      // Save the event because you’ll need to trigger it later.
+      setDeferredPrompt(e);
+    });
+  }, []);
+
+  const handleInstallButtonClick = () => {
+    deferredPrompt?.prompt();
+  };
+
   return (
     <>
       <DeviceDetails />
@@ -133,6 +148,8 @@ export default function Authentication() {
       <button id="register" onClick={validateCredential}>
         Validate Credential
       </button>
+
+      <button onClick={handleInstallButtonClick}>Install PWA</button>
     </>
   );
 }
