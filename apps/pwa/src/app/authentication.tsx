@@ -128,14 +128,15 @@ export default function Authentication() {
       e.preventDefault();
       // Save the event because you’ll need to trigger it later.
       setDeferredPrompt(e);
-      console.log(e.prompt);
-      setTimeout(() => handleInstallButtonClick(e), 1000);
+      setTimeout(() => {
+        document.getElementById('install')?.click();
+      }, 1000);
     });
   }, []);
 
-  const handleInstallButtonClick = (e: any) => {
-    console.log(deferredPrompt);
-    e?.prompt();
+  const handleInstallButtonClick = () => {
+    console.log('deferredPrompt', deferredPrompt);
+    deferredPrompt?.prompt();
   };
 
   return (
@@ -152,7 +153,10 @@ export default function Authentication() {
         Validate Credential
       </button>
 
-      <button onClick={handleInstallButtonClick}>Install PWA</button>
+      <br />
+      <button id="install" onClick={handleInstallButtonClick}>
+        Install PWA
+      </button>
     </>
   );
 }
