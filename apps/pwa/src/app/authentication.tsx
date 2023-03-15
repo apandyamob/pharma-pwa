@@ -128,13 +128,14 @@ export default function Authentication() {
       e.preventDefault();
       // Save the event because you’ll need to trigger it later.
       setDeferredPrompt(e);
-      setTimeout(() => handleInstallButtonClick(), 1000);
+      console.log(e);
+      setTimeout(() => handleInstallButtonClick(e), 1000);
     });
   }, []);
 
-  const handleInstallButtonClick = () => {
+  const handleInstallButtonClick = (e: any) => {
     console.log(deferredPrompt);
-    deferredPrompt?.prompt();
+    e?.prompt();
   };
 
   return (
