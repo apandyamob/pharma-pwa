@@ -44,14 +44,14 @@ const registerServiceWorker = () => {
       function (registration) {
         console.log('Service worker registration succeeded:', registration);
         // below condition will ensure that confirm modal not shown for the first installation
-        // if (!navigator.serviceWorker.controller) {
-        // console.log('controller for first time');
-        // The window client isn't currently controlled so it's a new service
-        // worker that will activate immediately
-        // return;
-        // }
+        if (!navigator.serviceWorker.controller) {
+          // console.log('controller for first time');
+          // The window client isn't currently controlled so it's a new service
+          // worker that will activate immediately
+          return;
+        }
 
-        registration.update();
+        // registration.update();
 
         setInterval(() => {
           registration.update();
