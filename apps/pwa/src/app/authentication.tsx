@@ -132,6 +132,13 @@ export default function Authentication() {
         document.getElementById('install')?.click();
       }, 1000);
     });
+
+    const isUpdatedPWA = localStorage.getItem('updatedPWA');
+
+    if (isUpdatedPWA) {
+      alert('Application has been updated!');
+      localStorage.removeItem('updatedPWA');
+    }
   }, []);
 
   const handleInstallButtonClick = () => {
@@ -143,7 +150,7 @@ export default function Authentication() {
     <>
       <DeviceDetails />
       <button id="register" onClick={registerCredential}>
-        Register Credential 6.0
+        Register Credential 6.1
       </button>
 
       <br />
