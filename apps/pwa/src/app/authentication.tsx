@@ -167,11 +167,9 @@ export default function Authentication() {
       </button>
 
       <br />
-      {!!deferredPrompt && (
-        <button id="install" onClick={handleInstallButtonClick}>
-          Install PWA
-        </button>
-      )}
+      <button id="install" onClick={handleInstallButtonClick}>
+        Install PWA
+      </button>
     </>
   );
 }
