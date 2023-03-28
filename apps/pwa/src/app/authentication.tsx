@@ -124,13 +124,12 @@ export default function Authentication() {
 
   useEffect(() => {
     window.addEventListener('beforeinstallprompt', (e: any) => {
+      console.log('deferredPrompt listener', deferredPrompt);
+      console.log('event', e);
       // Prevents the default mini-infobar or install dialog from appearing on mobile
       e.preventDefault();
       // Save the event because you’ll need to trigger it later.
       setDeferredPrompt(e);
-      setTimeout(() => {
-        document.getElementById('install')?.click();
-      }, 1000);
     });
 
     const isUpdatedPWA = localStorage.getItem('updatedPWA');
