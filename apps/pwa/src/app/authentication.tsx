@@ -141,7 +141,7 @@ export default function Authentication() {
   }, []);
 
   const handleInstallButtonClick = () => {
-    console.log('deferredPrompt', deferredPrompt);
+    alert('deferredPrompt is undefined:' + deferredPrompt === undefined);
     deferredPrompt?.prompt();
   };
 
