@@ -99,6 +99,10 @@ function DeviceDetails() {
 
 export default function Authentication() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>();
+  const [
+    isDeviceSupportsDeferredInstallation,
+    setIsDeviceSupportsDeferredInstallation,
+  ] = useState(false);
   const registerCredential = async () => {
     try {
       const cred: any = await navigator.credentials.create(options as any);
@@ -124,8 +128,6 @@ export default function Authentication() {
 
   useEffect(() => {
     window.addEventListener('beforeinstallprompt', (e: any) => {
-      console.log('deferredPrompt listener', deferredPrompt);
-      console.log('event', e);
       // Prevents the default mini-infobar or install dialog from appearing on mobile
       e.preventDefault();
       // Save the event because you’ll need to trigger it later.
@@ -141,8 +143,13 @@ export default function Authentication() {
   }, []);
 
   const handleInstallButtonClick = () => {
-    alert('deferredPrompt is undefined:' + deferredPrompt === undefined);
-    deferredPrompt?.prompt();
+    console.log('deferredPrompt', deferredPrompt);
+    try {
+      deferredPrompt?.prompt();
+    } catch (ex) {
+      alert(ex);
+      console.log(ex);
+    }
   };
 
   return (
@@ -160,9 +167,11 @@ export default function Authentication() {
       </button>
 
       <br />
-      <button id="install" onClick={handleInstallButtonClick}>
-        Install PWA
-      </button>
+      {!!deferredPrompt && (
+        <button id="install" onClick={handleInstallButtonClick}>
+          Install PWA
+        </button>
+      )}
     </>
   );
 }
