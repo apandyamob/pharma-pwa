@@ -142,7 +142,7 @@ export default function Authentication() {
         ),
         rp: {
           name: 'Security',
-          id: 'localhost',
+          id: 'github.io',
         },
         user: user.data,
         pubKeyCredParams: [{ alg: -7, type: 'public-key' as const }],
