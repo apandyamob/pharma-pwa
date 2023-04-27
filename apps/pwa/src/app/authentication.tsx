@@ -142,7 +142,7 @@ export default function Authentication() {
         ),
         rp: {
           name: 'Security',
-          id: 'https://apandyamob.github.io/react-pwa/',
+          id: 'apandyamob.github.io',
         },
         user: user.data,
         pubKeyCredParams: [{ alg: -7, type: 'public-key' as const }],
