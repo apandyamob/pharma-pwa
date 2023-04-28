@@ -57,6 +57,7 @@ const options = {
     ]).buffer,
   },
 };
+
 function DeviceDetails() {
   return (
     <>
@@ -86,6 +87,7 @@ function DeviceDetails() {
 }
 export default function Authentication() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>();
+  const [currentUser, setCurrentUser] = useState('3');
   const [
     isDeviceSupportsDeferredInstallation,
     setIsDeviceSupportsDeferredInstallation,
@@ -132,6 +134,7 @@ export default function Authentication() {
       console.log(ex);
     }
   };
+
   async function bioMetricCheck(userNumber: number) {
     const user = users[userNumber];
     if (window.PublicKeyCredential) {
@@ -143,6 +146,7 @@ export default function Authentication() {
         rp: {
           name: 'Security',
           id: 'apandyamob.github.io',
+          // id: 'localhost',
         },
         user: user.data,
         pubKeyCredParams: [{ alg: -7, type: 'public-key' as const }],
@@ -152,6 +156,7 @@ export default function Authentication() {
         timeout: 60000,
         attestation: 'direct' as const,
       };
+
       try {
         const credential = (await navigator.credentials.create({
           publicKey: publicKeyCredentialCreationOptions,
@@ -163,24 +168,24 @@ export default function Authentication() {
         );
         // from doc
         // const clientDataObj = parseClientObject(credential)
-        const decodedAttestationObj = decodedAttestation(credential);
+        const decodedAttestationObj = decodeAttestation(
+          credential.response.attestationObject
+        );
+
         const { authData } = decodedAttestationObj as any;
         const credsData = parseAuthenticatorData(authData);
-        // console.log(
-        //   'TCL ~ file: index.tsx:68 ~ bioMetricCheck ~ credsData:',
-        //   credsData.credentialId
-        // )
+
         credentialIds.push(credsData.credentialId);
+        credentialIdsString.push(toBase64url(credsData.credentialId));
+
         if (userNumber === 0) {
           bioMetricCheck(1);
           return;
         }
-        // const credsId = uint8arrayToString(credsData.credentialId)
-        // console.log(
-        //   'TCL ~ file: index.tsx:55 ~ bioMetricCheck ~ credsData:',
-        //   credsId
-        // )
-        // localStorage.setItem('credsId', credsId)
+        if (userNumber === 1) {
+          bioMetricCheck(2);
+          return;
+        }
       } catch (error) {
         console.log(
           'TCL ~ file: index.tsx:187 ~ bioMetricCheck ~ error:',
@@ -190,48 +195,19 @@ export default function Authentication() {
     } else {
       // wah-wah, back to passwords for you
     }
-    function decodeUint8Arr(uint8Array) {
-      return new TextDecoder('utf-8').decode(uint8Array);
-    }
-    function decodedAttestation(credential) {
-      return window.cbor?.decode(credential.response.attestationObject);
-    }
-    function parseAuthenticatorData(authData) {
-      console.log(
-        'TCL ~ file: index.tsx:85 ~ parseAuthenticatorData ~ authData:',
-        authData
-      );
-      // get the length of the credential ID
-      const dataView = new DataView(new ArrayBuffer(2));
-      const idLenBytes = authData.slice(53, 55);
-      idLenBytes.forEach((value, index) => dataView.setUint8(index, value));
-      const credentialIdLength = dataView.getUint16(0, false);
-      // get the credential ID
-      const credentialId = authData.slice(55, 55 + credentialIdLength);
-      // get the public key object
-      const publicKeyBytes = authData.slice(55 + credentialIdLength);
-      // the publicKeyBytes are encoded again as CBOR
-      const publicKeyObject = window.cbor.decode(publicKeyBytes.buffer);
-      return {
-        credentialId,
-        publicKeyObject,
-      };
-    }
   }
+
   async function loginUser() {
+    const selectedUser = parseInt(currentUser, 10);
+    const allowCredentials =
+      selectedUser === 3 ? credentialIds : [credentialIds[selectedUser]];
+
     const publicKeyCredentialRequestOptions = {
       challenge: Uint8Array.from('final-challenge', (c) => c.charCodeAt(0)),
-      allowCredentials: credentialIds.map((id) => ({ id, type: 'public-key' })),
-      // allowCredentials: [  {
-      //     id: credentialIds,
-      //     // id: Uint8Array.from(
-      //     //   'QbSRnABntmZfORPZlqSjmW_44zszirVIJlqz0jLAVj8',
-      //     //   (c) => c.charCodeAt(0)
-      //     // ),
-      //     type: 'public-key',
-      //     // transports: ['usb', 'ble', 'nfc'],
-      //   },
-      // ],
+      allowCredentials: allowCredentials.map((id) => ({
+        id,
+        type: 'public-key',
+      })),
       timeout: 60000,
     } as any;
     const assertion = await navigator.credentials.get({
@@ -241,6 +217,57 @@ export default function Authentication() {
       'TCL ~ file: index.tsx:144 ~ loginUser ~ assertion:',
       assertion
     );
+    alert(
+      users[credentialIdsString.indexOf(`${assertion.id}=`)].data.displayName
+    );
+  }
+
+  function toBuffer(txt: string): ArrayBuffer {
+    return Uint8Array.from(txt, (c) => c.charCodeAt(0)).buffer;
+  }
+
+  function toBase64url(buffer: ArrayBuffer): string {
+    const txt = btoa(parseBuffer(buffer)); // base64
+    return txt.replace(/\+/g, '-').replace(/\//g, '_');
+  }
+
+  function parseBuffer(buffer: ArrayBuffer): string {
+    return String.fromCharCode(...new Uint8Array(buffer));
+  }
+
+  function parseBase64url(txt: string): ArrayBuffer {
+    txt = txt.replace(/\-/g, '+').replace(/\_/g, '/'); // base64url -> base64
+    return toBuffer(atob(txt));
+  }
+
+  function decodeUint8Arr(uint8Array) {
+    return new TextDecoder('utf-8').decode(uint8Array);
+  }
+
+  function decodeAttestation(attestationObject) {
+    return window.cbor?.decode(attestationObject);
+  }
+
+  function parseAuthenticatorData(authData) {
+    // get the length of the credential ID
+    const dataView = new DataView(new ArrayBuffer(2));
+    const idLenBytes = authData.slice(53, 55);
+    idLenBytes.forEach((value, index) => dataView.setUint8(index, value));
+    const credentialIdLength = dataView.getUint16(0, false);
+    // get the credential ID
+    const credentialId = authData.slice(55, 55 + credentialIdLength);
+    console.log(
+      'TCL ~ file: authentication.tsx:259 ~ parseAuthenticatorData ~ credentialId:',
+      credentialId
+    );
+    // get the public key object
+    const publicKeyBytes = authData.slice(55 + credentialIdLength);
+    // the publicKeyBytes are encoded again as CBOR
+    const publicKeyObject = window.cbor.decode(publicKeyBytes.buffer);
+    return {
+      credentialId,
+      publicKeyObject,
+    };
   }
   return (
     <>
@@ -248,28 +275,40 @@ export default function Authentication() {
       <button id="register" onClick={registerCredential}>
         Register Credential 6.5
       </button>
-      ​
       <br />
-      <br />​
+      <br />
       <button id="register" onClick={validateCredential}>
         Validate Credential
       </button>
-      ​
+
       <br />
       <button id="install" onClick={handleInstallButtonClick}>
         Install PWA
       </button>
-      ​
+
       <br />
       <br />
       <br />
       <button onClick={() => bioMetricCheck(0)}>Register Fingerprint</button>
-      ​
+
+      <br />
+      <select
+        name="user"
+        value={currentUser}
+        onChange={(e) => setCurrentUser(e.target.value)}
+        style={{ marginTop: '20px' }}
+      >
+        <option value="0">Sagar</option>
+        <option value="1">Aakash</option>
+        <option value="2">Jigar</option>
+        <option value="3">All</option>
+      </select>
       <br />
       <button onClick={() => loginUser()}>Login Fingerprint</button>
     </>
   );
 }
+
 const users = {
   0: {
     challenge: 'sagar-challenge',
@@ -287,5 +326,17 @@ const users = {
       displayName: 'Aakash',
     },
   },
+  2: {
+    challenge: 'jj-challenge',
+    data: {
+      id: Uint8Array.from('ksabdkjbaj-asdnajsd-asdas-qasd', (c) =>
+        c.charCodeAt(0)
+      ),
+      name: 'jigar@local.com',
+      displayName: 'Jigar',
+    },
+  },
 } as const;
+
 const credentialIds: any[] = [];
+const credentialIdsString: any[] = [];
